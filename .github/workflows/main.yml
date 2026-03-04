@@ -1,0 +1,19 @@
+name: Kick Streamer
+
+on:
+  workflow_dispatch: # يسمح لك بتشغيل البث يدوياً بضغطة زر
+
+jobs:
+  stream:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Start Streaming
+        run: |
+          ffmpeg -re -i "http://g.betlxz.xyz/st/sh/203885?token=ShN0YQ0JGlhBVEk9ShAWG04kBi5fWQJEC0E8WgsHJDJHQQQJQQQQQ1JHG0EQQQQQQQ0QQQ0UWwVQAVVQUwxNQ0QQQQQQQQxAWUcQAQQQQQQQRhVGQQQQQUcNUFJQDFFQBQQACEgSQQQQRw1BQQQHQQQQQEYcFAQQQQQQQQQQQQQQQQQQQRICDBYJW09EV1xnBQFUBV5SQw5HBkNJRAQQQRMLXEQIXB.RAAQxDEQdMVxpbRghcBwBDGEdUDhAITRMYEwsQdSESFEAGHUMGCEtbVw9GA0ZERUMYR14SOhRcEhVDVFNcAUIaWEFVFU9EVVNAPgdWCl5TAkAMQQQQRANDQBMdEFQQQQQQAQQQEQQQEAJDQQQQQQQQQ0dK" \
+          -c:v libx264 -preset veryfast -b:v 4000k -vf fps=30 \
+          -c:a aac -b:a 128k -ar 44100 -f flv \
+          "rtmps://fa723fc1b171.global-contribute.live-video.net:443/app/sk_us-west-2_rgH7DjNJtfoa_Nguhp5UXjrPVAH391RgVXKmWVzJCEF"
+
