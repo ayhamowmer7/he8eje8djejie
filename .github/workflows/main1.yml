@@ -1,30 +1,26 @@
-name: Kick Connection Test
+name: Kick Streamer Final Fixed
 
 on:
   workflow_dispatch:
 
 jobs:
-  check-connection:
+  stream:
     runs-on: ubuntu-latest
-    steps:
-      - name: Test Internet & DNS
-        run: |
-          echo "--- Checking Google DNS ---"
-          ping -c 3 8.8.8.8
-          
-      - name: Test Kick Server Reachability
-        run: |
-          echo "--- Testing Kick Stream Server ---"
-          # فحص إذا كان سيرفر كيك يستجيب للمنفذ 443
-          nc -zv fa723fc1b171.global-contribute.live-video.net 443
-          
-      - name: Test Source Link (M3U8)
-        run: |
-          echo "--- Checking Source Stream Link ---"
-          curl -I "http://tv.vibertv.online:2052/live/shaqlawatv/starz1/stream.m3u8"
+    timeout-minutes: 350
 
-      - name: Debug FFmpeg Handshake
+    steps:
+      - name: Install FFmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
+      - name: Start Streaming
         run: |
-          # محاولة بث تجريبية لمدة 10 ثواني فقط مع إظهار تفاصيل الاتصال كاملة
-          ffmpeg -re -f lavfi -i testsrc=size=1280x720:rate=25 -t 10 \
-          -c:v libx264 -f flv "rtmps://fa723fc1b171.global-contribute.live-video.net:443/app/Sk_us-west-2_YL5q2zli0shi_oUP1cjd3cHf4RMojJotSOewU0KK6QJ" -debug_ts
+          while true; do
+            ffmpeg -re -i "http://tv.vibertv.online:2052/live/shaqlawatv/starz1/stream.m3u8" \
+            -c:v libx264 -preset ultrafast -tune zerolatency \
+            -b:v 2500k -maxrate 2500k -bufsize 5000k \
+            -vf "scale=1280:720,format=yuv420p" -g 50 \
+            -c:a aac -b:a 128k -ar 44100 \
+            -f flv "rtmps://global-contribute.live-video.net:443/app/Sk_us-west-2_YL5q2zli0shi_oUP1cjd3cHf4RMojJotSOewU0KK6QJ" || echo "Retrying..."
+            sleep 5
+          done
+
