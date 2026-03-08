@@ -20,7 +20,6 @@ jobs:
             -b:v 2500k -maxrate 2500k -bufsize 5000k \
             -vf "scale=1280:720,format=yuv420p" -g 50 \
             -c:a aac -b:a 128k -ar 44100 \
-            -f flv "rtmps://global-contribute.live-video.net:443/app/Sk_us-west-2_YL5q2zli0shi_oUP1cjd3cHf4RMojJotSOewU0KK6QJ" || echo "Retrying..."
+            -f flv "rtmps://fa723fc1b171.global-contribute.live-video.net/app/Sk_us-west-2_YL5q2zli0shi_oUP1cjd3cHf4RMojJotSOewU0KK6QJ" || echo "Retrying..."
             sleep 5
           done
-
