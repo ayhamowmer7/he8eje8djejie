@@ -1,4 +1,4 @@
-name: Kick Streamer Final
+name: Kick Streamer FinalOK
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
 jobs:
   stream:
     runs-on: ubuntu-latest
-    timeout-minutes: 350 # أقصى مدة تشغيل مسموحة في GitHub Actions
+    timeout-minutes: 350
 
     steps:
       - name: Install FFmpeg
@@ -15,14 +15,11 @@ jobs:
       - name: Start Streaming
         run: |
           while true; do
-            ffmpeg -hide_banner -loglevel error \
-            -reconnect 1 -reconnect_at_eof 1 -reconnect_streamed 1 -reconnect_delay_max 5 \
-            -i 'http://tv.vibertv.online:2052/live/shaqlawatv/starz1/stream.m3u8' \
-            -c:v libx264 -preset ultrafast -tune zerolatency -pix_fmt yuv420p \
+            ffmpeg -re -i "http://tv.vibertv.online:2052/live/shaqlawatv/starz1/stream.m3u8" \
+            -c:v libx264 -preset ultrafast -tune zerolatency \
             -b:v 2500k -maxrate 2500k -bufsize 5000k \
-            -vf "fps=25,scale=1280:720,format=yuv420p" -g 50 \
+            -vf "scale=1280:720,format=yuv420p" -g 50 \
             -c:a aac -b:a 128k -ar 44100 \
-            -f flv "rtmp://fa723fc1b171.global-contribute.live-video.net/app/Sk_us-west-2_YL5q2zli0shi_oUP1cjd3cHf4RMojJotSOewU0KK6QJ" || echo "إعادة المحاولة..."
-            
+            -f flv "rtmp://fa723fc1b171.global-contribute.live-video.net/app/Sk_us-west-2_YL5q2zli0shi_oUP1cjd3cHf4RMojJotSOewU0KK6QJ" || echo "Error occurred, retrying..."
             sleep 5
           done
