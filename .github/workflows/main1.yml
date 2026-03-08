@@ -1,4 +1,4 @@
-name: Kick Streamer Optimized
+name: Kick Streamer Final
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
 jobs:
   stream:
     runs-on: ubuntu-latest
-    timeout-minutes: 350 
+    timeout-minutes: 350 # أقصى مدة تشغيل مسموحة في GitHub Actions
 
     steps:
       - name: Install FFmpeg
@@ -22,7 +22,7 @@ jobs:
             -b:v 2500k -maxrate 2500k -bufsize 5000k \
             -vf "fps=25,scale=1280:720,format=yuv420p" -g 50 \
             -c:a aac -b:a 128k -ar 44100 \
-            -f flv "rtmps://fa723fc1b171.global-contribute.live-video.net:443/app/sk_us-west-2_YL5q2zli0shi_oUP1cjd3cHf4RMojJotSOewU0KK6QJ" || echo "حدث خطأ، إعادة المحاولة..."
+            -f flv "rtmp://fa723fc1b171.global-contribute.live-video.net/app/Sk_us-west-2_YL5q2zli0shi_oUP1cjd3cHf4RMojJotSOewU0KK6QJ" || echo "إعادة المحاولة..."
             
             sleep 5
           done
